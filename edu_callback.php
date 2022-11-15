@@ -43,11 +43,11 @@ $occ = '';
 $bio = "";
 
 if($auth_method === "kh_oidc"){//高雄市例外處理
-    $uname = $claims['sub'] . '_' . $oidc_arr['tail']; //視有無申請真實帳號，沒有的話為hash值(即sub使用pairwaise)
+    $uname = substr($claims['sub'],0, 20) . '_' . $oidc_arr['tail']; //視有無申請真實帳號，沒有的話為hash值(即sub使用pairwaise)，長度過長截斷為20
     $name = $myts->addSlashes($claims['name']); //視有無申請真實完整姓名，沒有的話為<姓+老師/學生>
     $email = $claims['email']; //每個人不一定有mail，沒有為空白字串
     $SchoolCode = $myts->addSlashes($claims['kh_profile']['schoolid']);//教育部6位學校代碼
-    $JobName = (isset($claims['gender']))?'student':'teacher';
+    $JobName = (isset($claims['gender']))?'student':'teacher';//學生才有gender欄位
     $from = $oidc_arr['from'];
 }else if ($userinfo['email']) {
     $uname = $userinfo['sub'] . '_' . $oidc_arr['tail'];
